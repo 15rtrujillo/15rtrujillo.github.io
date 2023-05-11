@@ -1,0 +1,50 @@
+/*
+Light Purple: #8B5E89 or #A97CB0
+
+Ivory: #FDF3E7 or #F8F8F0
+
+Gold: #D4AF37 or #C8B273
+
+Dusty Rose: #CBA5A8 or #D3A3B1
+
+Dark Teal: #285E61 or #0E474A
+*/
+
+header {
+    background-color: #285E61;
+    color: #FFFFFF;
+    font-size: xx-large;
+    margin: 1% 5% 1% 5%;
+    padding: 2%;
+    text-align: center;
+}
+
+nav {
+    background-color: #285E61;
+    color: #FFFFFF;
+    font-size: large;
+    margin: 1% 5% 1% 5%;
+    padding: 2%;
+    display: flex;
+    justify-content: center;
+}
+
+nav td {
+    background-color: #FDF3E7;
+    color: #2E1A2C;
+    padding: 10%;
+}
+
+nav a, nav a:visited {
+    color: #2E1A2C;
+    font-style: normal;
+}
+
+body {
+    background-color: #2E1A2C;
+    color: #FFFFFF;
+}
+
+footer {
+    color: #FFFFFF;
+}
