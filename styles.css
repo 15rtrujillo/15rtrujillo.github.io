@@ -12,39 +12,104 @@ Dark Teal: #285E61 or #0E474A
 
 header {
     background-color: #285E61;
-    color: #FFFFFF;
+    color: #FDF3E7;
     font-size: xx-large;
-    margin: 1% 5% 1% 5%;
+    margin: 1% 5%;
     padding: 2%;
     text-align: center;
 }
 
 nav {
     background-color: #285E61;
-    color: #FFFFFF;
+    color: #FDF3E7;
     font-size: large;
-    margin: 1% 5% 1% 5%;
+    margin: 1% 5%;
     padding: 2%;
     display: flex;
     justify-content: center;
-}
-
-nav td {
-    background-color: #FDF3E7;
-    color: #2E1A2C;
-    padding: 10%;
+    gap: 1em; /* Adds spacing between each link */
 }
 
 nav a, nav a:visited {
     color: #2E1A2C;
-    font-style: normal;
+    text-decoration: none;
+    background-color: #FDF3E7; /* Box color */
+    padding: 0.5em 1em; /* Space inside the box */
+    border: 2px solid #2E1A2C; /* Box border */
+    border-radius: 5px; /* Optional: Rounded corners */
+    display: inline-block; /* Ensures the box fits the text */
+    text-align: center;
+}
+
+nav a:hover {
+    background-color: #2E1A2C; /* Hover effect */
+    color: #FDF3E7; /* Contrast text color */
 }
 
 body {
     background-color: #2E1A2C;
-    color: #FFFFFF;
+    color: #FDF3E7;
+    font-family: Arial, sans-serif;
+}
+
+.blog-layout {
+    display: flex; /* Use Flexbox for layout */
+    margin: 1% 5%;
+}
+
+.sidebar {
+    background-color: #285E61;
+    flex: 1;
+    /*max-width: 15%;  Ensure it doesn't exceed 25% of the width */
+    padding: 1em;
+    margin-right: 1%;
+}
+
+.sidebar h2 {
+    margin-bottom: 0.5em;
+}
+
+.sidebar ul {
+    list-style-type: none;
+}
+
+.sidebar li {
+    margin: 0.5em 0;
+}
+
+.sidebar a {
+    color: #FDF3E7;
+    text-decoration: none;
+}
+
+.sidebar a:visited {
+    color: #CBA5A8;
+    text-decoration: none;
+}
+
+.sidebar a:hover {
+    color: #2E1A2C;
+}
+
+.content {
+    flex: 5;
+    padding: 1em;
+    background-color: #285E61;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+}
+
+.content h4 {
+    font-style: italic;
+}
+
+.content p {
+    line-height: 1.5;
 }
 
 footer {
-    color: #FFFFFF;
+    background-color: #285E61; /* Optional: Add background color for contrast */
+    color: #FDF3E7;
+    text-align: center;
+    margin: 1% 5%;
+    padding: 2%;
 }
