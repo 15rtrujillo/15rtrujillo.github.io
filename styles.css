@@ -17,6 +17,7 @@ header {
     margin: 1% 5%;
     padding: 2%;
     text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 nav {
@@ -27,23 +28,24 @@ nav {
     padding: 2%;
     display: flex;
     justify-content: center;
-    gap: 1em; /* Adds spacing between each link */
+    gap: 1em;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 nav a, nav a:visited {
     color: #2E1A2C;
     text-decoration: none;
-    background-color: #FDF3E7; /* Box color */
-    padding: 0.5em 1em; /* Space inside the box */
-    border: 2px solid #2E1A2C; /* Box border */
-    border-radius: 5px; /* Optional: Rounded corners */
-    display: inline-block; /* Ensures the box fits the text */
+    background-color: #FDF3E7;
+    padding: 0.5em 1em;
+    border: 2px solid #2E1A2C;
+    border-radius: 5px;
+    display: inline-block;
     text-align: center;
 }
 
 nav a:hover {
-    background-color: #2E1A2C; /* Hover effect */
-    color: #FDF3E7; /* Contrast text color */
+    background-color: #2E1A2C;
+    color: #FDF3E7;
 }
 
 body {
@@ -53,16 +55,16 @@ body {
 }
 
 .blog-layout {
-    display: flex; /* Use Flexbox for layout */
+    display: flex;
     margin: 1% 5%;
 }
 
 .blog-layout a {
-    color: #FDF3E7;
+    color: #CBA5A8;
 }
 
 .blog-layout a:visited {
-    color: #CBA5A8;
+    color: #A97CB0;
 }
 
 .blog-layout a:hover {
@@ -75,6 +77,7 @@ body {
     /*max-width: 15%;  Ensure it doesn't exceed 25% of the width */
     padding: 1em;
     margin-right: 1%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar h2 {
@@ -101,7 +104,7 @@ body {
     flex: 5;
     padding: 1em;
     background-color: #285E61;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .content h4 {
@@ -113,9 +116,10 @@ body {
 }
 
 footer {
-    background-color: #285E61; /* Optional: Add background color for contrast */
+    background-color: #285E61;
     color: #FDF3E7;
     text-align: center;
     margin: 1% 5%;
     padding: 2%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
