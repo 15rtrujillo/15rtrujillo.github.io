@@ -57,6 +57,18 @@ body {
     margin: 1% 5%;
 }
 
+.blog-layout a {
+    color: #FDF3E7;
+}
+
+.blog-layout a:visited {
+    color: #CBA5A8;
+}
+
+.blog-layout a:hover {
+    color: #2E1A2C;
+}
+
 .sidebar {
     background-color: #285E61;
     flex: 1;
@@ -78,17 +90,11 @@ body {
 }
 
 .sidebar a {
-    color: #FDF3E7;
     text-decoration: none;
 }
 
 .sidebar a:visited {
-    color: #CBA5A8;
     text-decoration: none;
-}
-
-.sidebar a:hover {
-    color: #2E1A2C;
 }
 
 .content {
