@@ -1,0 +1,15 @@
+Welcome to My Site!
+2024/12/03
+I recently decided that I wanted make a website.
+
+I spent a long time deciding what type of website this should be, however I think I have finally settled on making this a blog. I've always wanted to be better at journaling and getting my thoughts down somewhere, so this might be a nice way to do that.
+
+I don't know how often I'll be updating this, but I would like to try to write something at least a couple times a month.
+
+As far as topics go, you can expect anything. I will say that my interests usually revolve around gaming and programming, so you can probably expect most of my posts to be about those topics. Sometimes I might write reviews of games I've been playing, other times I might write about different game mechanics I've been thinking about recently. Perhaps I might even write about some thoughts I have around online games (specifically MMOs).
+
+Along with the blog, I would also like to create a second page to house a portfolio. I think that this will mostly consist of my programming projects, but perhaps I'll also post some art or writings if I ever get decent at either of those things. Ideally I'd also link my YouTube channel, but I don't really want to tie that to my real-life name. I honestly don't think it would be too hard to figure out, though.
+
+You might be wondering: *Why would you have a portfolio section for programming projects when you also link to your Github?* That's a good question! I was mostly thinking that it would be nice to have everything in one place. Plus, not all of my programming projects can go on Github for one reason or another, and so it would be nice to have a place to talk about them.
+
+Anyways, that's going to be it for my first post. Hopefully there will be more in the future!
