@@ -2,16 +2,16 @@ import datetime
 import os
 import shutil
 
+
 with open("template.html", "r") as template_file:
     BLOG_HTML_TEMPLATE = template_file.read()
 BLOGPOST_DIRECTORY = os.path.join(os.getcwd(), "blogposts")
-HTML_DIRECTORY = os.path.join(BLOGPOST_DIRECTORY, "html")
 
 
 class BlogPost:
     def __init__(self, title: str, date: datetime.datetime, post_text: str):
         self._title: str = title
-        self.date: datetime.datetime = date
+        self._date: datetime.datetime = date
         self._post: str = post_text
         self._html_post: str | None = None
 
@@ -21,14 +21,23 @@ class BlogPost:
 
     def get_expanded_post_date(self) -> str:
         """Retrive the post's date in the Month d, YYYY format"""
-        return self.date.strftime("%B %d, %Y").replace(" 0", " ")
+        return self._date.strftime("%B %d, %Y").replace(" 0", " ")
     
-    def get_expanded_post_date_no_year(self) -> str:
-        return self.date.strftime("%B %d").replace(" 0", " ")
+    def get_post_month_name(self) -> str:
+        """Retrive the post's month"""
+        return self._date.strftime("%B")
     
-    def get_iso_post_date(self) -> str:
-        """Retrieve the post's date in the YYYY-mm-dd format"""
-        return self.date.strftime("%Y-%m-%d")
+    def get_iso_post_date_no_day(self) -> str:
+        """Retrieve the post's date in the YYYY-mm format"""
+        return self._date.strftime("%Y-%m")
+    
+    def get_post_year(self) -> int:
+        """Get the post's year as an int"""
+        return self._date.year
+    
+    def get_post_month(self) -> int:
+        """Get the post's month as an int"""
+        return self._date.month
 
     def get_html_date(self) -> str:
         """Retrive the post's date with the proper HTML tags"""
@@ -89,15 +98,14 @@ class BlogPost:
     def __str__(self) -> str:
         return f"""{self._title}
 {self.get_expanded_post_date()}
-{self._post}
-"""
+{self._post}"""
 
 
-def get_files_in_directory(directory: str) -> list[str]:
+def get_blogpost_files() -> list[str]:
     """
     Get a list of the names of all the files in a directory (including extensions)
     """
-    files = [os.path.join(BLOGPOST_DIRECTORY, f) for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
+    files = [os.path.join(BLOGPOST_DIRECTORY, f) for f in os.listdir(BLOGPOST_DIRECTORY) if os.path.isfile(os.path.join(directory, f))]
     return files
 
 
@@ -123,33 +131,47 @@ def read_blogpost(file_name: str) -> BlogPost:
     return BlogPost(title, date, post_text)
 
 
-def recreate_html_directory():
-    shutil.rmtree(HTML_DIRECTORY)
-    os.mkdir(HTML_DIRECTORY)
+def sort_posts(posts: list[BlogPost]) -> dict[int, dict[str, list[BlogPost]]]:
+    sorted_posts: dict[int, dict[str, list[BlogPost]]] = {}
 
-
-def generate_archive(posts: list[BlogPost], individual: bool) -> str:
-    current_year: datetime.datetime = None
-    archive_html = ""
+    current_year: int = -1
+    current_month: int = -1
+    current_month_name: str = ""
     for post in posts:
-        if current_year is None:
-            current_year = post.date
-            archive_html += f"<li><details><summary>{current_year.year}</summary>\n<ul>\n"
-        elif current_year.year != post.date.year:
-            current_year = post.date
-            archive_html += f"</ul>\n</details></li>\n<li><details><summary>{current_year.year}</summary>\n<ul>\n"
+        if current_year == -1 or current_year != post.get_post_year():
+            current_year = post.get_post_year()
+            sorted_posts[current_year] = {}
+        
+        if current_month == -1 or current_month != post.get_post_month():
+            current_month = post.get_post_month()
+            current_month_name = post.get_post_month_name()
+            sorted_posts[current_year][current_month_name] = []
 
-        if individual:
-            archive_html += f"<li><a href=\"{post.get_iso_post_date()}.html\">{post.get_expanded_post_date_no_year()}</a></li>\n"
-        else:
-            archive_html += f"<li><a href=\"blogposts/html/{post.get_iso_post_date()}.html\">{post.get_expanded_post_date_no_year()}</a></li>\n"
+        sorted_posts[current_year][current_month_name].append(post)
 
-    archive_html += f"</ul>\n</details></li>\n"
+    return sorted_posts
+
+
+def generate_archive(sorted_posts: dict[int, dict[str, list[BlogPost]]]) -> str:
+    archive_html = ""
+    for year in sorted_posts:
+        archive_html += f"<li><details><summary>{year}</summary>\n<ul>\n"
+        for month in sorted_posts[year]:
+            # The page's name should be YYYY-mm
+            page_name = f"{sorted_posts[year][month][0].get_iso_post_date_no_day()}.html"
+
+            # Unless this is the page for this month/year, then it should be index.html.
+            if year == datetime.datetime.now().year and month == datetime.datetime.now().strftime("%B"):
+                page_name = "index.html"
+
+            archive_html += f"<li><a href=\"{page_name}\">{month}</a></li>\n"
+
+        archive_html += f"</ul>\n</details></li>\n"
 
     return archive_html
 
 
-def generate_individual_page(post: BlogPost, archive: str) -> str:
+def generate_month_page(posts: list[BlogPost], archive: str) -> str:
     page_html = BLOG_HTML_TEMPLATE
     page_html = page_html.replace("<!--@ARCHIVE HERE@-->", archive)
 
@@ -164,21 +186,23 @@ def generate_individual_page(post: BlogPost, archive: str) -> str:
 def main():
     print("Reading post files...")
     posts: list[BlogPost] = []
-    file_names = get_files_in_directory(BLOGPOST_DIRECTORY)
+    file_names = get_blogpost_files(BLOGPOST_DIRECTORY)
     for file_name in file_names:
         post = read_blogpost(file_name)
         posts.append(post)
     posts.reverse()
 
-    print("Recreating blogposts/html directory...")
+    print("Sorting posts by year and month...")
+    sorted_posts = sort_posts(posts)
+    # print("Recreating blogposts/html directory...")
     # recreate_html_directory()
 
-    print("Generating archive list for individual pages...")
-    archive = generate_archive(posts, True)
+    print("Generating archive list for month pages...")
+    archive = generate_archive(sorted_posts)
 
-    print("Creating individual blogpost pages...")
+    print("Creating monthly blogpost pages...")
     for post in posts:
-        html = generate_individual_page(post, archive)
+        html = generate_month_page(posts, archive)
         with open(os.path.join(HTML_DIRECTORY, post.get_iso_post_date() + ".html"), "w") as file:
             file.write(html)
 
