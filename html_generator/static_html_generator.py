@@ -112,7 +112,7 @@ def main():
     # print("Recreating blogposts/html directory...")
     # recreate_html_directory()
 
-    print("Generating archive list for month pages...")
+    print("Generating archive list...")
     archive = generate_archive(sorted_posts)
     
     print("Creating monthly blogpost pages...")
@@ -122,7 +122,6 @@ def main():
             with open(page.file_name, "w") as file:
                 file.write(html)
 
-    input("Press ENTER to exit...")
 
 if __name__ == "__main__":
     main()
