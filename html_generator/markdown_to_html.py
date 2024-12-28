@@ -17,9 +17,9 @@ RE_UNDERLINED = re.compile(UNDERLINED)
 
 # Lists
 ORDERED_LIST = r"^([0-9])+\.\s(.+)$"
-RE_ORDERED_LIST = re.compile(ORDERED_LIST)
+RE_ORDERED_LIST = re.compile(ORDERED_LIST, re.MULTILINE)
 UNORDERED_LIST = r"^-\s(.+)$"
-RE_UNORDERED_LIST = re.compile(UNORDERED_LIST)
+RE_UNORDERED_LIST = re.compile(UNORDERED_LIST, re.MULTILINE)
 
 # Misc
 LINKS = r"\[(.+?)\]\((.+?)\)"
@@ -73,19 +73,20 @@ def parse_links(line: str) -> str:
 
 
 def parse_numbered_list(text: str) -> str:
-    """Parses text for numbered lists"""
+    """Parses text for lists"""
     lists: list[HTMLList] = []
     current_list: HTMLList | None = None
-    # Loop through each line in the text
-    for line in text.split("\n"):
-        found = re.match(RE_ORDERED_LIST, line)
-        if found is None:
-            if current_list is not None:
-                lists.append(current_list)
-                current_list = None
-            continue
+    matches = re.finditer(RE_ORDERED_LIST, text)
+    for found in matches:
+        number = found.group(1)
+        element = found.group(2)
 
         if current_list is None:
+            current_list = HTMLList()
+
+        # We need to start a new list if the distance is greater than 1
+        if current_list.end is not None and found.start() > (int(current_list.end) + 1):
+            lists.append(current_list)
             current_list = HTMLList()
 
         if current_list.start is None:
@@ -95,10 +96,14 @@ def parse_numbered_list(text: str) -> str:
             current_list.end = found.end()
 
         if current_list.start_number is None:
-            current_list.start_number = found.group(1)
+            current_list.start_number = number
 
-        current_list.elements.append(found.group(2))
+        current_list.elements.append(element)
 
+    # Append the final list (if there is one)
+    if current_list is not None:
+        lists.append(current_list)
+    
     if len(lists) == 0:
         return text
 
@@ -112,7 +117,7 @@ def parse_numbered_list(text: str) -> str:
             new_text += text[lists[i-1].end:current_list.start]
 
         new_text += "</p>\n"
-        new_text += "<ol>\n" if current_list.start_number == 1 else f"<ol start=\"{current_list.start_number}\">\n"
+        new_text += "<ol>\n" if current_list.start_number == "1" else f"<ol start=\"{current_list.start_number}\">\n"
         for element in current_list.elements:
             new_text += "<li>" + element + "</li>\n"
         new_text += "</ol>\n<p>"
