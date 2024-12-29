@@ -176,4 +176,4 @@ __Underlined__
 3. list
 [My nifty link](https://google.com)"""
 
-    parse_markdown_to_html(test_string)
+    print(parse_markdown_to_html(test_string))

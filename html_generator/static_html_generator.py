@@ -16,6 +16,7 @@ def get_blogpost_files() -> list[str]:
     Get a list of the names of all the files in a directory (including extensions)
     """
     files = [os.path.join(BLOGPOST_DIRECTORY, f) for f in os.listdir(BLOGPOST_DIRECTORY) if os.path.isfile(os.path.join(BLOGPOST_DIRECTORY, f))]
+    files.sort()
     return files
 
 

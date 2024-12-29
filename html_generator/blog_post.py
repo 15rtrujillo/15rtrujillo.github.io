@@ -45,42 +45,6 @@ class BlogPost:
 
         return self._html_post
     
-    @staticmethod
-    def _replace_symbol_with_tag(post: str, symbol: str, tag: str) -> str:
-        post_list: list[str] = []
-        start_index = 0
-        end_index = post.find(symbol)
-        first = True
-        while end_index != -1:
-            # If the symbol is preceeded with a \, we want to ignore the symbol.
-            # We also don't want to consume the \.
-            if post[end_index-1] == "\\":
-                post_list.append(post[start_index:end_index-1])
-                post_list.append(post[end_index:end_index+len(symbol)])
-                start_index = end_index + len(symbol)
-                end_index = post.find(symbol, start_index)
-                continue
-
-            # Add everything up to the symbol
-            post_list.append(post[start_index:end_index])
-
-            # If this is the "opening" occurence of the symbol, do an open tag
-            if first:
-                post_list.append(f"<{tag}>")
-            else:
-                post_list.append(f"</{tag}>")
-            
-            # Reset
-            first = not first
-            start_index = end_index + len(symbol)
-            end_index = post.find(symbol, start_index)
-
-        if not first:
-            print(f"Error! Unclosed {symbol} in post starting with {post_list[0]}")
-
-        post_list.append(post[start_index:])
-        return "".join(post_list)
-
     def __str__(self) -> str:
         return f"""{self._title}
 {self.get_expanded_post_date()}
