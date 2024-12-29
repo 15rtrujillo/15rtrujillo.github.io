@@ -72,20 +72,26 @@ def parse_links(line: str) -> str:
     return new_line
 
 
-def parse_numbered_list(text: str) -> str:
+def parse_list(text: str, numbered: bool=True) -> str:
     """Parses text for lists"""
     lists: list[HTMLList] = []
     current_list: HTMLList | None = None
-    matches = re.finditer(RE_ORDERED_LIST, text)
+    if numbered:
+        matches = re.finditer(RE_ORDERED_LIST, text)
+    else:
+        matches = re.finditer(RE_UNORDERED_LIST, text)
+
     for found in matches:
-        number = found.group(1)
-        element = found.group(2)
+        if numbered:
+            number = found.group(1)
+            element = found.group(2)
+        else:
+            element = found.group(1)
 
         if current_list is None:
             current_list = HTMLList()
-
-        # We need to start a new list if the distance is greater than 1
-        if current_list.end is not None and found.start() > (int(current_list.end) + 1):
+        elif found.start() > (int(current_list.end) + 1):
+            # We need to start a new list if the distance is greater than 1
             lists.append(current_list)
             current_list = HTMLList()
 
@@ -95,7 +101,7 @@ def parse_numbered_list(text: str) -> str:
         if current_list.end is None or current_list.end < found.end():
             current_list.end = found.end()
 
-        if current_list.start_number is None:
+        if numbered and current_list.start_number is None:
             current_list.start_number = number
 
         current_list.elements.append(element)
@@ -117,13 +123,26 @@ def parse_numbered_list(text: str) -> str:
             new_text += text[lists[i-1].end:current_list.start]
 
         new_text += "</p>\n"
-        new_text += "<ol>\n" if current_list.start_number == "1" else f"<ol start=\"{current_list.start_number}\">\n"
+        if numbered:
+            new_text += "<ol>\n" if current_list.start_number == "1" else f"<ol start=\"{current_list.start_number}\">\n"
+        else:
+            new_text += "<ul>\n"
+
         for element in current_list.elements:
             new_text += "<li>" + element + "</li>\n"
-        new_text += "</ol>\n<p>"
+
+        new_text += "</ol>\n<p>" if numbered else "</ul>\n<p>"
 
     # Grab the rest of the text
     new_text += text[current_list.end:]
+    return new_text
+
+
+def parse_paragraphs(text: str) -> str:
+    """Add paragraph tags wherever we have two newlines in a row"""
+    new_text = "<p>"
+    new_text += text.replace("\n\n", "</p>\n<p>")
+    new_text += "</p>"
     return new_text
 
 
@@ -135,13 +154,18 @@ def parse_markdown_to_html(text: str) -> str:
         new_line = parse_text_decoration(new_line, RE_UNDERLINED)
         new_line = parse_links(new_line)
         new_text += new_line + "\n"
-    print(parse_numbered_list(new_text))
+    new_text = parse_list(new_text)
+    new_text = parse_list(new_text, False)
+    new_text = parse_paragraphs(new_text)
+    
+    return new_text
 
 
 if __name__ == "__main__":
     test_string = """This should not match *This text should be italicized.*
 **This text \*should be bolded**
 ***This text should be both***
+
 *This text* ***should be a mix***
 __Underlined__
 1. Numbered

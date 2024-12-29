@@ -1,4 +1,5 @@
 import datetime
+import markdown_to_html as parser
 
 
 class BlogPost:
@@ -40,15 +41,7 @@ class BlogPost:
         if self._html_post is not None:
             return self._html_post
         
-        # Replace * with <em></em> tags
-        new_post = self._replace_symbol_with_tag(self._post, "*", "em")
-
-        # Create <p></p> tags
-        final_post = "<p>"
-        final_post += new_post.replace("\n\n", "</p>\n<p>")
-        final_post += "</p>"
-
-        self._html_post = final_post
+        self._html_post = parser.parse_markdown_to_html(self._post)
 
         return self._html_post
     
