@@ -1,7 +1,0 @@
-Roblox
-2025/01/13
-Happy New Year! I haven't written in a while; I actually went to Europe over the holidays to spend time with my girlfriend and her family. As this isn't really a personal blog, I won't be writing about that here. However, as you can see from the title, I do have a topic that I want to write about.
-
-I haven't gotten around to writing about it on the [portfolio](portfolio.html) page yet (or maybe I have by the time you read this), but I used to spend quite a bit of time with [Roblox](https://www.roblox.com) when I was younger.
-
-If you aren't familiar with what Roblox is, it's basically a game engine and game-sharing platform rolled into one service. You create a Roblox account, with which you can play thousands of user-created games that span everything from simple obstacle courses to complex RPGs. While I did enjoy playing other people's games from time to time, I was more often interested in trying to make my own games. I can attribute a lot of my early programming learning to Roblox Lua. Unfortunately however, that isn't what this post is about.
