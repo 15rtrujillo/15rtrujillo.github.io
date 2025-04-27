@@ -1,14 +1,17 @@
+from blog import Blog
 from blog_page import BlogPage
 from blog_post import BlogPost
+from datetime import datetime
+from shutil import rmtree
 
 
-import datetime
 import os
 
 
 with open(os.path.join(os.getcwd(), "template.html"), "r") as template_file:
     BLOG_HTML_TEMPLATE = template_file.read()
 BLOGPOST_DIRECTORY = os.path.join(os.getcwd(), "blogposts")
+HTML_DIRECTORY = os.path.join(BLOGPOST_DIRECTORY, "html")
 
 
 def get_blogpost_files() -> list[str]:
@@ -29,7 +32,7 @@ def read_blogpost(file_name: str) -> BlogPost:
 
     # Try to grab the date formatted as YYYY/mm/dd
     try:
-        date = datetime.datetime.strptime(file.readline().rstrip(), "%Y/%m/%d")
+        date = datetime.strptime(file.readline().rstrip(), "%Y/%m/%d")
     except ValueError:
         print(f"Error converting datetime in blogpost {file_name}. Terminating.")
         file.close()
@@ -42,40 +45,18 @@ def read_blogpost(file_name: str) -> BlogPost:
     return BlogPost(title, date, post_text)
 
 
-def sort_posts(posts: list[BlogPost]) -> dict[int, dict[int, BlogPage]]:
-    sorted_posts: dict[int, dict[int, BlogPage]] = {}
-
-    current_year: int = -1
-    current_month: int = -1
-    for post in posts:
-        if current_year == -1 or current_year != post.get_post_year():
-            current_year = post.get_post_year()
-            sorted_posts[current_year] = {}
-        
-        if current_month == -1 or current_month != post.get_post_month():
-            current_month = post.get_post_month()
-
-            page = BlogPage()
-            page.year = current_year
-            page.month = current_month
-            page.month_name = post.get_post_month_name()
-
-            now = datetime.datetime.now()
-            page.file_name = "index.html" if current_year == now.year and current_month == now.month else f"{post.get_iso_post_date_no_day()}.html"
-
-            sorted_posts[current_year][current_month] = page
-
-        sorted_posts[current_year][current_month].posts.append(post)
-
-    return sorted_posts
+def recreate_html_directory():
+    if os.path.exists(HTML_DIRECTORY):
+        rmtree(HTML_DIRECTORY)
+    os.mkdir(HTML_DIRECTORY)
 
 
-def generate_archive(sorted_posts: dict[int, dict[int, BlogPage]]) -> str:
+def generate_archive(blog: Blog) -> str:
     archive_html = ""
-    for year in sorted_posts:
+    for year in blog.pages:
         archive_html += f"<li><details><summary>{year}</summary>\n<ul>\n"
-        for page in sorted_posts[year].values():
-            archive_html += f"<li><a href=\"{page.file_name}\">{page.month_name}</a></li>\n"
+        for page in blog.get_pages_in_year(year):
+            archive_html += f"<li><a href=\"@IS INDEX ARCHIVE@{page.file_name}\">{page.month_name}</a></li>\n"
 
         archive_html += f"</ul>\n</details></li>\n"
 
@@ -84,7 +65,10 @@ def generate_archive(sorted_posts: dict[int, dict[int, BlogPage]]) -> str:
 
 def generate_month_page(page: BlogPage, archive: str) -> str:
     page_html = BLOG_HTML_TEMPLATE
+    
+    page_html = page_html.replace("@IS INDEX@", "" if page.file_name == "index.html" else "../../")
     page_html = page_html.replace("<!--@ARCHIVE HERE@-->", archive)
+    page_html = page_html.replace("@IS INDEX ARCHIVE@", "blogposts/html/" if page.file_name == "index.html" else "")
 
     all_posts = ""
     for i in range(len(page.posts)):
@@ -92,7 +76,7 @@ def generate_month_page(page: BlogPage, archive: str) -> str:
         all_posts += f"""{post.get_html_title()}
 {post.get_html_date()}
 {post.get_html_post()}"""
-        if i < len(page.posts)-1:
+        if i > 0:
             all_posts += "\n<p><a href=\"#top\">Back to the top</a></p><hr />\n"
 
     page_html = page_html.replace("<!--@POST HERE@-->", all_posts)
@@ -109,19 +93,29 @@ def main():
     posts.reverse()
 
     print("Sorting posts by year and month...")
-    sorted_posts = sort_posts(posts)
-    # print("Recreating blogposts/html directory...")
-    # recreate_html_directory()
+    blog = Blog()
+    for post in posts:
+        blog.add_blog_post(post)
+
+    print("Recreating blogposts/html directory...")
+    recreate_html_directory()
 
     print("Generating archive list...")
-    archive = generate_archive(sorted_posts)
+    archive = generate_archive(blog)
     
     print("Creating monthly blogpost pages...")
-    for year in sorted_posts:
-        for page in sorted_posts[year].values():
+    for year in blog.pages:
+        for page in blog.get_pages_in_year(year):
             html = generate_month_page(page, archive)
-            with open(page.file_name, "w") as file:
+            with open(os.path.join(HTML_DIRECTORY, page.file_name), "w") as file:
                 file.write(html)
+
+    print("Creating index page...")
+    html = generate_month_page(blog.get_index_page(), archive)
+    with open("index.html", "w") as file:
+        file.write(html)
+
+    print("\nDone!")
 
 
 if __name__ == "__main__":

@@ -155,7 +155,7 @@ def parse_markdown_to_html(text: str) -> str:
         new_line = parse_links(new_line)
         new_text += new_line + "\n"
     new_text = parse_list(new_text)
-    new_text = parse_list(new_text, False)
+    new_text = parse_list(new_text, numbered=False)
     new_text = parse_paragraphs(new_text)
     
     return new_text
