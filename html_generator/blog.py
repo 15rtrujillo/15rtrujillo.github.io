@@ -24,11 +24,10 @@ class Blog:
     def get_pages_in_year(self, year: int) -> list[BlogPage]:
         return [page for page in self.pages[year].values()]
 
-    def get_index_page(self) -> BlogPage:
+    def get_newest_page(self) -> BlogPage:
         max_year = max(self.pages.keys())
         max_month = max(self.pages[max_year].keys())
 
-        index = copy(self.pages[max_year][max_month])
-        index.file_name = "index.html"
+        newest = copy(self.pages[max_year][max_month])
         
-        return index
+        return newest

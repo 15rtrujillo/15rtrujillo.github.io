@@ -12,6 +12,12 @@ with open(os.path.join(os.getcwd(), "template.html"), "r") as template_file:
     BLOG_HTML_TEMPLATE = template_file.read()
 BLOGPOST_DIRECTORY = os.path.join(os.getcwd(), "blogposts")
 HTML_DIRECTORY = os.path.join(BLOGPOST_DIRECTORY, "html")
+INDEX_HTML = """<!DOCTYPE html>
+<head>
+    <title>Ryan's Website</title>
+    <meta http-equiv="refresh" content="0; url=@NEWEST@" />
+</head>
+"""
 
 
 def get_blogpost_files() -> list[str]:
@@ -56,7 +62,7 @@ def generate_archive(blog: Blog) -> str:
     for year in blog.pages:
         archive_html += f"<li><details><summary>{year}</summary>\n<ul>\n"
         for page in blog.get_pages_in_year(year):
-            archive_html += f"<li><a href=\"@IS INDEX ARCHIVE@{page.file_name}\">{page.month_name}</a></li>\n"
+            archive_html += f"<li><a href=\"{page.file_name}\">{page.month_name}</a></li>\n"
 
         archive_html += f"</ul>\n</details></li>\n"
 
@@ -65,10 +71,7 @@ def generate_archive(blog: Blog) -> str:
 
 def generate_month_page(page: BlogPage, archive: str) -> str:
     page_html = BLOG_HTML_TEMPLATE
-    
-    page_html = page_html.replace("@IS INDEX@", "" if page.file_name == "index.html" else "../../")
     page_html = page_html.replace("<!--@ARCHIVE HERE@-->", archive)
-    page_html = page_html.replace("@IS INDEX ARCHIVE@", "blogposts/html/" if page.file_name == "index.html" else "")
 
     all_posts = ""
     for i in range(len(page.posts)):
@@ -111,7 +114,8 @@ def main():
                 file.write(html)
 
     print("Creating index page...")
-    html = generate_month_page(blog.get_index_page(), archive)
+    newest_page = blog.get_newest_page()
+    html = INDEX_HTML.replace("@NEWEST@", f"blogposts/html/{newest_page.file_name}")
     with open("index.html", "w") as file:
         file.write(html)
 
