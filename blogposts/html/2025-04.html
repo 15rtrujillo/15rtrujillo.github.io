@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<head>
+    <title>Ryan's Website</title>
+    <link rel="stylesheet" type="text/css" href="../../styles.css">
+</head>
+<html>
+    <body>
+        <header id="top">Ryan's Website</header>
+        <nav>
+            <a href="../../index.html">Blog</a>
+            <a href="../../portfolio.html">Portfolio/Best Projects</a>
+            <a href="https://github.com/15rtrujillo">GitHub Profile</a>
+        </nav>
+        <main class="blog-layout">
+            <aside class="sidebar">
+                <h2>Blog Archive</h2>
+                <ul>
+                    <li><details><summary>2025</summary>
+<ul>
+<li><a href="2025-04.html">April</a></li>
+<li><a href="2025-01.html">January</a></li>
+</ul>
+</details></li>
+<li><details><summary>2024</summary>
+<ul>
+<li><a href="2024-12.html">December</a></li>
+</ul>
+</details></li>
+
+                </ul>
+            </aside>
+            <section class="content">
+                <h2 id="2025/04/28">Learning 3D Graphics</h2>
+<h4>April 28, 2025</h4>
+<p>I guess it's been a couple months since I last made a post, but I wanted to share what I've been excited about working on recently.</p>
+<p>One thing I've always been very interested in was computer graphics. It's always seemed like such a magical thing, to be able to instruct the GPU to draw three-dimensional images on the screen. It's something I've always wanted to play around with; I just never knew where to start.</p>
+<p>Well, here we are.</p>
+<p><img src="../../images/drawing_terrain.gif" alt="A gif of a rotating 3D model. The model resembles basic terrain without any texturing." /></p>
+<p>This model was generated entirely from code, using <a href="https://github.com/15rtrujillo/Dungeon/blob/f5baa0897f13aa765fdf2ef479a9a56a30cb6d30/Content/height.txt">this data file</a> as a heightmap. I will admit that I did have some help, as I used the MonoGame framework to handle most of the direct OpenGL calls. You can see the drawing code for yourself <a href="https://github.com/15rtrujillo/Dungeon/blob/fe0f04302a91f945610bf5c34ee873555fd04c79/TerrainRenderer.cs">here</a>.</p>
+<p>Side note: If you aren't familiar with MonoGame, from what I understand it's essentially an open-source, multi-platform wrapper for Microsoft's old XNA game development framework.</p>
+<p>I know that for people familiar with 3D graphics that this probably doesn't seem too impressive, but this is pretty new to me and I'm still learning.</p>
+<p>To further my learning, I eventually would like to delve even deeper into the layers of abstraction and work directly with something like OpenGL or DirectX. I recently acquired a copy of <a href="https://www.amazon.com/Real-Time-Rendering-Fourth-Tomas-Akenine-M%C3%B6ller/dp/1138627003">Real Time Rendering, Fourth Edition</a> by Tomas Akenine-Moller, Eric Haines, and Naty Hoffman (that's not an affiliate link). I've only had the chance to read through the first chapter so far, but I find all of it so interesting.</p>
+<p>Anyway, that's all I have for now. I hope you're having a good time with all of your learning endeavors!
+</p>
+            </section>
+        </main>
+        <footer>Copyright © 2024-2025 Ryan Trujillo. All rights reserved.</footer>
+    </body>
+</html>

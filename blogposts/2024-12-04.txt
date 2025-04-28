@@ -1,5 +1,4 @@
 My History with Programming
-2024/12/04
 My first exposure to programming occurred around age 10 when my father introduced me to the Phrogram programming language. I'm not sure if it exists anymore, but it was a programming language and enviornment that was designed to help beginners (especially children) get into programming, specifically games programming. I will be honest and say that I didn't really accomplish much with this program.
 
 I could go off on a side tangent here about "Club Spider," but this probably isn't the best place. Perhaps I'll write about it in another post one day.

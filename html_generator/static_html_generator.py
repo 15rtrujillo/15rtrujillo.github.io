@@ -17,6 +17,9 @@ INDEX_HTML = """<!DOCTYPE html>
     <title>Ryan's Website</title>
     <meta http-equiv="refresh" content="0; url=@NEWEST@" />
 </head>
+<html>
+    <p><a href="@NEWEST@">Click here</a> if you are not automatically redirected to the home page.</p>
+</html>
 """
 
 
@@ -29,20 +32,25 @@ def get_blogpost_files() -> list[str]:
     return files
 
 
-def read_blogpost(file_name: str) -> BlogPost:
+def read_blogpost(file_path: str) -> BlogPost:
     """Read a text file and create a BlogPost object"""
-    file = open(file_name, "r")
+    try:
+        file = open(file_path, "r")
+    except OSError as ex:
+        print(f"Error opening file: {file_path}.\n{ex}")
+        exit()
+
+    # Use the filename to get the date.
+    file_name = os.path.basename(file_path)[:-4]
+    try:
+        date = datetime.strptime(file_name, "%Y-%m-%d")
+    except ValueError:
+        print(f"Error converting datetime in blogpost {file_path}. Terminating.")
+        file.close()
+        exit()
 
     # Get the first line as the title and remove the \n
     title = file.readline().rstrip()
-
-    # Try to grab the date formatted as YYYY/mm/dd
-    try:
-        date = datetime.strptime(file.readline().rstrip(), "%Y/%m/%d")
-    except ValueError:
-        print(f"Error converting datetime in blogpost {file_name}. Terminating.")
-        file.close()
-        exit()
 
     # Grab the rest of the post with no processing
     post_text = "".join(file.readlines())
@@ -53,7 +61,11 @@ def read_blogpost(file_name: str) -> BlogPost:
 
 def recreate_html_directory():
     if os.path.exists(HTML_DIRECTORY):
-        rmtree(HTML_DIRECTORY)
+        try:
+            rmtree(HTML_DIRECTORY)
+        except OSError as ex:
+            print("Error deleting HTML directory. You might have to delete it manually.", ex, sep="\n")
+            exit()
     os.mkdir(HTML_DIRECTORY)
 
 

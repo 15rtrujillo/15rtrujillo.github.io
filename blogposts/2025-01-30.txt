@@ -1,5 +1,4 @@
 "Games as a Service" Pricing Models
-2025/01/30
 I've been playing Andrew Gower's [Brighter Shores](https://www.brightershores.com/) since its release back in November. I've actually wanted to write a blog post or make a video about the game for a while now, but I just haven't yet been able to formulate my thoughts in a way I'm satisfied with. So, this isn't that post.
 
 What this post is actually about is how the expectations for the pricing models of live service games seem to have shifted over the thirty-five years that I've been alive. When I say, "live service games," I'm specifically referring to games that receive consistent and fairly frequent updates and attention from their developers. This can range from games like Fortnite or Helldivers to RuneScape or World of Warcraft. Brighter Shores would also be covered under this definition.
