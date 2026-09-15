@@ -92,7 +92,9 @@ def generate_month_page(page: BlogPage, archive: str) -> str:
 {post.get_html_date()}
 {post.get_html_post()}"""
         if i > 0:
-            all_posts += "\n<p><a href=\"#top\">Back to the top</a></p><hr />\n"
+            all_posts += "\n<p><a href=\"#top\">Back to the top</a></p>"
+        if i < len(page.posts) - 1:
+            all_posts += "<hr />\n"
 
     page_html = page_html.replace("<!--@POST HERE@-->", all_posts)
 

@@ -16,7 +16,7 @@ UNDERLINED = r"(?<!\\)__([^\\]+?(?:\\.[^\\]*?)*?)__"
 RE_UNDERLINED = re.compile(UNDERLINED)
 
 # Lists
-ORDERED_LIST = r"^([0-9])+\.\s(.+)$"
+ORDERED_LIST = r"^([0-9]+)\.\s(.+)$"
 RE_ORDERED_LIST = re.compile(ORDERED_LIST, re.MULTILINE)
 UNORDERED_LIST = r"^-\s(.+)$"
 RE_UNORDERED_LIST = re.compile(UNORDERED_LIST, re.MULTILINE)
@@ -39,7 +39,7 @@ def parse_text_decoration(line: str, pattern: re.Pattern[str]) -> str:
             if match_text.startswith("***"):
                 html += "<em><strong>"
                 html += group_text
-                html += "</em></strong>"
+                html += "</strong></em>"
             elif match_text.startswith("**"):
                 html += "<strong>"
                 html += group_text
